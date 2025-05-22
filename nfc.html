@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kpop Idol Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            max-width: 400px;
+            width: 100%;
+            transform: scale(0.9);
+            animation: cardAppear 0.8s ease-out forwards;
+        }
+
+        @keyframes cardAppear {
+            from {
+                transform: scale(0.7) translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #ff6b6b, #ffa500);
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .nfc-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .card-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .card-image-container {
+            position: relative;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card-image {
+            width: 280px;
+            height: 350px;
+            border-radius: 15px;
+            object-fit: cover;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .card-image:hover {
+            transform: scale(1.05);
+        }
+
+        .loading-placeholder {
+            width: 280px;
+            height: 350px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .card-info {
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-value {
+            color: #333;
+            font-weight: 500;
+        }
+
+        .card-actions {
+            padding: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #555;
+            border: 2px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: #dc3545;
+        }
+
+        .error-icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 480px) {
+            .card-container {
+                margin: 10px;
+            }
+            
+            .card-image, .loading-placeholder {
+                width: 240px;
+                height: 300px;
+            }
+            
+            .card-title {
+                font-size: 20px;
+            }
+        }
+
+        /* Special effects for premium cards */
+        .premium-card {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: -100% 0; }
+            50% { background-position: 100% 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="card-container" id="cardContainer">
+        <!-- Header -->
+        <div class="card-header">
+            <div class="nfc-icon">
+                <i class="fas fa-wifi"></i>
+            </div>
+            <div class="card-title">Kpop Idol Card</div>
+            <div class="card-subtitle">NFC Activated</div>
+        </div>
+
+        <!-- Card Content -->
+        <div id="cardContent">
+            <!-- Loading State -->
+            <div id="loadingState" class="card-image-container">
+                <div class="loading-placeholder">
+                    <i class="fas fa-spinner fa-spin fa-2x"></i>
+                </div>
+            </div>
+
+            <!-- Card Display -->
+            <div id="cardDisplay" style="display: none;">
+                <div class="card-image-container">
+                    <img id="cardImage" class="card-image" alt="Kpop Idol Card">
+                </div>
+
+                <div class="card-info">
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="fas fa-user"></i>
+                            Idol Name
+                        </span>
+                        <span class="info-value" id="idolName">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="fas fa-users"></i>
+                            Group
+                        </span>
+                        <span class="info-value" id="groupName">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="fas fa-id-card"></i>
+                            Card ID
+                        </span>
+                        <span class="info-value" id="cardId">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="fas fa-star"></i>
+                            Rarity
+                        </span>
+                        <span class="info-value" id="rarity">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="fas fa-calendar"></i>
+                            Release Date
+                        </span>
+                        <span class="info-value" id="releaseDate">-</span>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn btn-primary" onclick="shareCard()">
+                        <i class="fas fa-share-alt"></i>
+                        Share
+                    </button>
+                    <button class="btn btn-secondary" onclick="saveCard()">
+                        <i class="fas fa-heart"></i>
+                        Save
+                    </button>
+                </div>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" style="display: none;" class="error-message">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h3>Card Not Found</h3>
+                <p>The requested card could not be loaded.</p>
+                <button class="btn btn-primary" onclick="retryLoad()" style="margin-top: 20px; max-width: 200px;">
+                    <i class="fas fa-redo"></i>
+                    Try Again
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Card database - In real app, this would come from your backend
+        const cardDatabase = {
+            'TWICE-001': {
+                idolName: 'Tzuyu',
+                groupName: 'TWICE',
+                cardId: 'TWICE-001',
+                rarity: 'Legendary',
+                releaseDate: '2016-10-15',
+                image: 'https://64.media.tumblr.com/bb3a5e8ae80f634268eeb37a8ebf014d/tumblr_ofiw1lN4jS1ujcaa1o1_1280.jpg',
+                description: 'TWICE Tzuyu TWICECoaster:Lane 1 Card'
+            },
+            'BTS-013': {
+                idolName: 'Jungkook',
+                groupName: 'BTS',
+                cardId: 'BTS-013',
+                rarity: 'Ultra Rare',
+                releaseDate: '2024-02-20',
+                image: 'https://i.imgur.com/fFzF5l1.jpg',
+                description: 'Jungkook DICON Special Edition'
+            },
+            'BP-021': {
+                idolName: 'Jennie',
+                groupName: 'BLACKPINK',
+                cardId: 'BP-021',
+                rarity: 'Rare',
+                releaseDate: '2024-03-10',
+                image: 'https://i.imgur.com/kYKsNta.jpg',
+                description: 'BLACKPINK Pink Venom Era'
+            },
+            'SVT-033': {
+                idolName: 'Mingyu',
+                groupName: 'SEVENTEEN',
+                cardId: 'SVT-033',
+                rarity: 'Common',
+                releaseDate: '2024-01-25',
+                image: 'https://i.imgur.com/YpJMLu9.jpg',
+                description: 'SEVENTEEN Follow Album'
+            }
+        };
+
+        // Get card ID from URL parameters
+        function getCardIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id') || urlParams.get('cardId') || 'TWICE-001'; // Default card for demo
+        }
+
+        // Load card data
+        function loadCard() {
+            const cardId = getCardIdFromUrl();
+            
+            // Show loading state
+            document.getElementById('loadingState').style.display = 'block';
+            document.getElementById('cardDisplay').style.display = 'none';
+            document.getElementById('errorState').style.display = 'none';
+
+            // Simulate loading delay (remove in production)
+            setTimeout(() => {
+                const cardData = cardDatabase[cardId];
+                
+                if (cardData) {
+                    displayCard(cardData);
+                } else {
+                    showError();
+                }
+            }, 1500);
+        }
+
+        // Display card information
+        function displayCard(cardData) {
+            // Hide loading, show card
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('cardDisplay').style.display = 'block';
+            document.getElementById('errorState').style.display = 'none';
+
+            // Populate card data
+            document.getElementById('cardImage').src = cardData.image;
+            document.getElementById('cardImage').alt = `${cardData.idolName} - ${cardData.groupName}`;
+            document.getElementById('idolName').textContent = cardData.idolName;
+            document.getElementById('groupName').textContent = cardData.groupName;
+            document.getElementById('cardId').textContent = cardData.cardId;
+            document.getElementById('rarity').textContent = cardData.rarity;
+            document.getElementById('releaseDate').textContent = cardData.releaseDate;
+
+            // Add special effects for rare cards
+            if (cardData.rarity === 'Legendary' || cardData.rarity === 'Ultra Rare') {
+                document.querySelector('.card-header').classList.add('premium-card');
+            }
+
+            // Update page title
+            document.title = `${cardData.idolName} - ${cardData.groupName} Card`;
+        }
+
+        // Show error state
+        function showError() {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('cardDisplay').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+        }
+
+        // Retry loading
+        function retryLoad() {
+            loadCard();
+        }
+
+        // Share card function
+        function shareCard() {
+            if (navigator.share) {
+                navigator.share({
+                    title: document.title,
+                    text: `Check out this amazing Kpop idol card!`,
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                // Fallback to copying URL
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    alert('Card URL copied to clipboard!');
+                });
+            }
+        }
+
+        // Save card function (add to favorites)
+        function saveCard() {
+            const cardId = getCardIdFromUrl();
+            let savedCards = JSON.parse(localStorage.getItem('savedCards') || '[]');
+            
+            if (!savedCards.includes(cardId)) {
+                savedCards.push(cardId);
+                localStorage.setItem('savedCards', JSON.stringify(savedCards));
+                alert('Card saved to your favorites!');
+            } else {
+                alert('Card is already in your favorites!');
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCard();
+            
+            // Add touch/click effects for mobile
+            document.querySelector('.card-image').addEventListener('click', function() {
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+
+        // Handle image loading errors
+        document.addEventListener('DOMContentLoaded', function() {
+            const cardImage = document.getElementById('cardImage');
+            cardImage.addEventListener('error', function() {
+                this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgwIiBoZWlnaHQ9IjM1MCIgdmlld0JveD0iMCAwIDI4MCAzNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyODAiIGhlaWdodD0iMzUwIiBmaWxsPSIjRjBGMEYwIi8+CjxwYXRoIGQ9Ik0xNDAgMTc1QzE1MS4wNDYgMTc1IDE2MCAzMTY2LjA0NiAxNjAgMTU1QzE2MCAzNDMuOTU0IDE1MS4wNDYgMTM1IDE0MCAxMzVDMTI4Ljk1NCAxMzUgMTIwIDEzMy45NTQgMTIwIDE1NUMxMjAgMTY2LjA0NiAxMjguOTU0IDE3NSAxNDAgMTc1WiIgZmlsbD0iI0NDQ0NDQyIvPgo8L3N2Zz4K';
+                this.alt = 'Image not available';
+            });
+        });
+    </script>
+</body>
+</html>
